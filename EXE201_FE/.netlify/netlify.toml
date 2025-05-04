@@ -1,0 +1,28 @@
+plugins = []
+headers = []
+redirects = []
+
+[functions]
+
+[functions."*"]
+
+[build]
+publish = "C:\\Users\\ADMIN\\Desktop\\Ki 8\\EXE201\\HybridDeploy\\EXE201_FE\\dist"
+publishOrigin = "ui"
+commandOrigin = "ui"
+base = "C:\\Users\\ADMIN\\Desktop\\Ki 8\\EXE201\\HybridDeploy\\EXE201_FE"
+command = "npm run build"
+
+[build.environment]
+
+[build.processing]
+
+[build.processing.css]
+
+[build.processing.html]
+
+[build.processing.images]
+
+[build.processing.js]
+
+[build.services]
