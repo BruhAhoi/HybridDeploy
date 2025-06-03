@@ -73,8 +73,8 @@ const RestorationReview: React.FC = () => {
   const [droppedWords, setDroppedWords] = useState<Word[]>([]);
 
   const moveWord = (word: Word, fromIndex: number) => {
-    const newWords = words.filter((w, index) => index !== fromIndex);
-    console.log('Moved word:', word, 'from index:', fromIndex);
+    const newWords = words.filter((_w, index) => index !== fromIndex);
+    console.log('Moved word:', word, 'from index:', fromIndex, 'to dropped area');
     setWords(newWords);
   };
 
