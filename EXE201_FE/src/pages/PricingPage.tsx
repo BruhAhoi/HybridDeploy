@@ -46,7 +46,7 @@ const PricingPage: React.FC = () => {
 
         {/* Danh sách các loại tài khoản: nằm ngang */}
         <div className="flex gap-6 justify-center flex-wrap">
-            {plans.map((plan, index) => (
+            {plans.map((plan, ) => (
             <div
                 key={plan.name}
                 className="bg-[#d6e4ff] rounded-xl px-6 py-4 flex flex-col items-center w-52"
@@ -82,7 +82,9 @@ const PricingPage: React.FC = () => {
         </div>
 
         {/* Nút Back */}
-        <button className="mt-6 bg-blue-800 text-white px-8 py-2 rounded-full hover:bg-blue-900">
+        <button
+        onClick={() => navigate('/')}
+        className="mt-6 bg-blue-800 text-white px-8 py-2 rounded-full hover:bg-blue-900">
             Back
         </button>
         </div>
