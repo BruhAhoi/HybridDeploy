@@ -22,7 +22,14 @@ const userSlice = createSlice({
       state.accessToken = action.payload.accessToken;
       state.refreshToken = action.payload.refreshToken;
     },
-    logout: () => initialState,
+    logout: (state) => {
+      state.userId = "";
+      state.roleId = "";
+      state.roleName = "";
+      state.accessToken = "";
+      state.refreshToken = "";
+      Cookies.remove("user");
+    },
   }
 });
 
