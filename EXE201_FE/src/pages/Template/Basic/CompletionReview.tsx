@@ -61,27 +61,28 @@ const CompletionReview: React.FC = () => {
               </span>
             </div>
             <div className="flex flex-wrap gap-2 mt-2 ml-6">
-              {options[index].map((word: string | number | bigint | boolean | React.ReactElement<unknown, string | React.JSXElementConstructor<unknown>> | Iterable<React.ReactNode> | Promise<string | number | bigint | boolean | React.ReactPortal | React.ReactElement<unknown, string | React.JSXElementConstructor<unknown>> | Iterable<React.ReactNode> | null | undefined> | null | undefined, wordIndex: React.Key | null | undefined) => {
-                if (typeof word !== "string") return null;
-                return (
-                  <button
-                    key={wordIndex}
-                    onClick={() => handleAnswerChange(index, word)}
-                    className={`px-2 py-1 rounded ${
-                      answers[index].includes(word)
-                        ? "bg-green-400 text-white"
-                        : wordIndex === 0 || wordIndex === 1
-                        ? "bg-green-200"
-                        : wordIndex === 2
-                        ? "bg-blue-200"
-                        : "bg-orange-200"
-                    }`}
-                    disabled={submitted}
-                  >
-                    {word}
-                  </button>
-                );
-              })}
+              {options[index].map((word: string | number | bigint | boolean | React.ReactElement<unknown, string | React.JSXElementConstructor<unknown>> | Iterable<React.ReactNode> | Promise<string | number | bigint | boolean | React.ReactPortal | React.ReactElement<unknown, string | React.JSXElementConstructor<unknown>> | Iterable<React.ReactNode> | null | undefined> | null | undefined, wordIndex: React.Key | null | undefined) => (
+                <button
+                  key={wordIndex}
+                  onClick={() => {
+                    if (typeof word === "string") {
+                      handleAnswerChange(index, word);
+                    }
+                  }}
+                  className={`px-2 py-1 rounded ${
+                    typeof word === "string" && answers[index].includes(word)
+                      ? "bg-green-400 text-white"
+                      : wordIndex === 0 || wordIndex === 1
+                      ? "bg-green-200"
+                      : wordIndex === 2
+                      ? "bg-blue-200"
+                      : "bg-orange-200"
+                  }`}
+                  disabled={submitted}
+                >
+                  {word}
+                </button>
+              ))}
             </div>
           </div>
         ))}

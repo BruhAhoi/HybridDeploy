@@ -32,30 +32,34 @@ const WordCard: React.FC<{ word: Word; index: number; moveWord?: (from: number, 
   );
 };
 
-const DropArea: React.FC<{ words: Word[]; moveWord: (word: Word, from: number) => void; setDroppedWords: React.Dispatch<React.SetStateAction<Word[]>>; originalWords: Word[] }> = ({ words, moveWord, setDroppedWords, originalWords }) => {
+const DropArea: React.FC<{ words: Word[]; setDroppedWords: React.Dispatch<React.SetStateAction<Word[]>>; originalWords: Word[]; removeWord: (fromIndex: number) => void }> = ({ words, setDroppedWords, originalWords, removeWord }) => {
   const [, drop] = useDrop({
     accept: ItemTypes.WORD,
     drop: (item: { id: number; index: number }) => {
       const droppedWord = originalWords[item.index];
       if (droppedWord) {
         setDroppedWords((prev) => [...prev, droppedWord]);
-        moveWord(droppedWord, item.index);
+        removeWord(item.index);
       }
     },
   });
 
+  const dropRef = React.useCallback((node: HTMLDivElement | null) => {
+    if (node) {
+      drop(node);
+    }
+  }, [drop]);
+
   return (
     <div
-      ref={(node) => {
-        if (node) drop(node);
-      }}
+      ref={dropRef}
       className="w-full h-12 border border-gray-400 rounded flex items-center justify-center space-x-2 p-2"
     >
       {words.length === 0 ? (
         <span className="text-gray-500">Drop words here</span>
       ) : (
         words.map((word, index) => (
-          <WordCard key={word.id} word={word} index={index} moveWord={() => {}} isInDropArea={true} />
+          <WordCard key={word.id} word={word} index={index} isInDropArea={true} />
         ))
       )}
     </div>
@@ -72,9 +76,8 @@ const RestorationReview: React.FC = () => {
   const [words, setWords] = useState<Word[]>(shuffledWords);
   const [droppedWords, setDroppedWords] = useState<Word[]>([]);
 
-  const moveWord = (word: Word, fromIndex: number) => {
+  const removeWord = (fromIndex: number) => {
     const newWords = words.filter((_, index) => index !== fromIndex);
-    console.log('Moved word:', word, 'from index:', fromIndex);
     setWords(newWords);
   };
 
@@ -99,7 +102,7 @@ const RestorationReview: React.FC = () => {
         {/* Word Grid */}
         <div className="w-[900px] h-[400px] bg-pink-100 border rounded-lg p-6 mb-12 flex justify-center items-center">
           <div className="grid grid-cols-3 gap-12 mt-5 mb-5">
-            {words.map((word, index) => (
+            {words.map((word: Word, index: number) => (
               <WordCard
                 key={word.id}
                 word={word}
@@ -112,9 +115,9 @@ const RestorationReview: React.FC = () => {
 
         {/* Drop Area */}
         <div className='w-225 h-20'>
-            <DropArea words={droppedWords} moveWord={moveWord} setDroppedWords={setDroppedWords} originalWords={words} />
+          <DropArea words={droppedWords} removeWord={removeWord} setDroppedWords={setDroppedWords} originalWords={words} />
         </div>
-        
+        <DropArea words={droppedWords} setDroppedWords={setDroppedWords} originalWords={words} removeWord={removeWord} />
 
         {/* Buttons */}
         <div className="w-full max-w-[700px] flex justify-between items-center px-4 mt-4">
