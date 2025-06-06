@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { Course } from "../types/index";
 import { useSelector } from "react-redux";
 import { RootState } from "../store/store";
+import { baseImageUrl } from "../config/base";
 
 
 const CoursePage: React.FC = () => {
@@ -19,7 +20,6 @@ const CoursePage: React.FC = () => {
   const roleId = useSelector((state: RootState) => state.user.roleId);
 
   const pageSize = 3;
-  const baseImageUrl = "https://hybridelearn-acdwdxa8dmh2fdgm.southeastasia-01.azurewebsites.net/images/";
 
   const extractThumbnail = (dataText?: string): string => {
     if (!dataText) {
@@ -126,8 +126,8 @@ const CoursePage: React.FC = () => {
           className="relative bg-cover bg-center h-[650px] flex items-center justify-center"
           style={{ backgroundImage: `url(${BG})` }}
         >
-          <div className="absolute top-1/4 text-white text-xl font-semibold">Choose a course</div>
-          <div className="absolute top-1/3 text-white text-3xl font-bold">text</div>
+          {/* <div className="absolute top-1/4 text-white text-xl font-semibold">Choose a course</div>
+          <div className="absolute top-1/3 text-white text-3xl font-bold">text</div> */}
           <div className="flex bg-white rounded-md overflow-hidden mt-40 shadow-md">
             <select
               className="px-4 py-2 border-r border-gray-300 text-gray-600"
@@ -136,8 +136,8 @@ const CoursePage: React.FC = () => {
             >
               <option value="">Level</option>
               <option value="1">Starter</option>
-              <option value="2">Flyers</option>
-              <option value="3">Movers</option>
+              <option value="2">Movers</option>
+              <option value="3">Flyers</option>
             </select>
             <input
               type="text"

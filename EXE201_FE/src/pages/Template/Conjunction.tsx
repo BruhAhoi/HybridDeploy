@@ -94,7 +94,7 @@ const ConjunctionTemplate: React.FC<ConjunctionTemplateProps> = ({ courseId }) =
       const response = await createConjunction(conjunctionData);
       if (response) {
         toast.success("Minigame created successfully!");
-        navigate("/teacher/accomplishments");
+        navigate("/teacher/activities"); // Chuyển hướng về trang activities
       } else {
         toast.error("Failed to create minigame. Please check the console for more details.");
       }
