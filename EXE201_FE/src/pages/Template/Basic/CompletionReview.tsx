@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 
 const CompletionReview: React.FC = () => {
   const { state } = useLocation();
-  const { activityName, modifiedSentences, options } = state || {};
+  const { activityName, originalSentences, modifiedSentences, options } = state || {};
   const navigate = useNavigate();
   const [answers, setAnswers] = useState<string[][]>(options.map(() => []));
   const [submitted, setSubmitted] = useState(false);
@@ -45,7 +45,7 @@ const CompletionReview: React.FC = () => {
           readOnly
           className="w-full p-2 mb-4 border rounded bg-gray-100"
         />
-        {modifiedSentences.map((sentence: string, index: number) => (
+        {modifiedSentences.map((sentence, index) => (
           <div key={index} className="mb-4">
             <div className="flex items-center">
               <span className="mr-2">{index + 1}.</span>
@@ -61,27 +61,24 @@ const CompletionReview: React.FC = () => {
               </span>
             </div>
             <div className="flex flex-wrap gap-2 mt-2 ml-6">
-              {options[index].map((word: unknown, wordIndex: React.Key | null | undefined) => {
-                if (typeof word !== "string") return null;
-                return (
-                  <button
-                    key={wordIndex}
-                    onClick={() => handleAnswerChange(index, word)}
-                    className={`px-2 py-1 rounded ${
-                      answers[index].includes(word)
-                        ? "bg-green-400 text-white"
-                        : wordIndex === 0 || wordIndex === 1
-                        ? "bg-green-200"
-                        : wordIndex === 2
-                        ? "bg-blue-200"
-                        : "bg-orange-200"
-                    }`}
-                    disabled={submitted}
-                  >
-                    {word}
-                  </button>
-                );
-              })}
+              {options[index].map((word, wordIndex) => (
+                <button
+                  key={wordIndex}
+                  onClick={() => handleAnswerChange(index, word)}
+                  className={`px-2 py-1 rounded ${
+                    answers[index].includes(word)
+                      ? "bg-green-400 text-white"
+                      : wordIndex === 0 || wordIndex === 1
+                      ? "bg-green-200"
+                      : wordIndex === 2
+                      ? "bg-blue-200"
+                      : "bg-orange-200"
+                  }`}
+                  disabled={submitted}
+                >
+                  {word}
+                </button>
+              ))}
             </div>
           </div>
         ))}

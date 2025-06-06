@@ -13,18 +13,15 @@ const ItemTypes = {
   WORD: 'word',
 };
 
-const WordCard: React.FC<{ word: Word; index: number; moveWord: (from: number, to: number) => void; isInDropArea: boolean }> = ({ word, index, isInDropArea }) => {
-  const ref = React.useRef<HTMLDivElement>(null);
+const WordCard: React.FC<{ word: Word; index: number; moveWord: (from: number, to: number) => void; isInDropArea: boolean }> = ({ word, index, moveWord, isInDropArea }) => {
   const [, drag] = useDrag({
     type: ItemTypes.WORD,
     item: { id: word.id, index },
   });
 
-  drag(ref);
-
   return (
     <div
-      ref={ref}
+      ref={drag}
       className={`px-4 py-2 bg-yellow-200 text-black rounded-full cursor-move ${isInDropArea ? 'opacity-50' : ''} text-center`}
     >
       {word.text}
@@ -33,8 +30,7 @@ const WordCard: React.FC<{ word: Word; index: number; moveWord: (from: number, t
 };
 
 const DropArea: React.FC<{ words: Word[]; moveWord: (word: Word, from: number) => void; setDroppedWords: React.Dispatch<React.SetStateAction<Word[]>>; originalWords: Word[] }> = ({ words, moveWord, setDroppedWords, originalWords }) => {
-  const dropRef = React.useRef<HTMLDivElement>(null);
-  useDrop({
+  const [, drop] = useDrop({
     accept: ItemTypes.WORD,
     drop: (item: { id: number; index: number }) => {
       const droppedWord = originalWords[item.index];
@@ -43,12 +39,11 @@ const DropArea: React.FC<{ words: Word[]; moveWord: (word: Word, from: number) =
         moveWord(droppedWord, item.index);
       }
     },
-    collect: () => ({}),
-  })[1](dropRef);
+  });
 
   return (
     <div
-      ref={dropRef}
+      ref={drop}
       className="w-full h-12 border border-gray-400 rounded flex items-center justify-center space-x-2 p-2"
     >
       {words.length === 0 ? (
@@ -73,8 +68,7 @@ const RestorationReview: React.FC = () => {
   const [droppedWords, setDroppedWords] = useState<Word[]>([]);
 
   const moveWord = (word: Word, fromIndex: number) => {
-    const newWords = words.filter((_w, index) => index !== fromIndex);
-    console.log('Moved word:', word, 'from index:', fromIndex, 'to dropped area');
+    const newWords = words.filter((_, index) => index !== fromIndex);
     setWords(newWords);
   };
 
@@ -104,7 +98,7 @@ const RestorationReview: React.FC = () => {
                 key={word.id}
                 word={word}
                 index={index}
-                moveWord={() => {}}
+                moveWord={moveWord}
                 isInDropArea={false}
               />
             ))}
