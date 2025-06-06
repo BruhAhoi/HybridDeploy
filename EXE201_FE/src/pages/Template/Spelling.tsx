@@ -6,7 +6,7 @@ import Header from "../../components/HomePage/Header";
 interface SpellingProps {
     courseId?: string;
 }
-const Spelling: React.FC<SpellingProps> = ({courseId}) => {
+const Spelling: React.FC<SpellingProps> = () => {
     const [activityName, setActivityName] = useState<string>("");
     const [mode, setMode] = useState<"none" | "voice" | "qa">("none");
     const [inputWord, setInputWord] = useState(['']);

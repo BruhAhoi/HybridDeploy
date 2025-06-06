@@ -7,7 +7,7 @@ import Header from "../../components/HomePage/Header";
 interface RandomCardProps {
     courseId?: string;
 }
-const RandomCard: React.FC<RandomCardProps> = ({courseId}) => {
+const RandomCard: React.FC<RandomCardProps> = () => {
     const [activityName, setActivityName] = useState<string>("");
     const [cards, setCards] = useState<RandomCardItem[]>([{
         keyword: "",

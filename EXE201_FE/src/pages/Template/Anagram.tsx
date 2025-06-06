@@ -12,7 +12,7 @@ interface AnagramTemplateProps {
   courseId?: string;  
 }
 
-const AnagramTemplate: React.FC<AnagramTemplateProps> = ({courseId}) => {
+const AnagramTemplate: React.FC<AnagramTemplateProps> = () => {
 
   const [activityName, setActivityNameLocal] = useState("");
   const [entries, setEntries] = useState<AnagramEntry[]>([{ word: "" }]);

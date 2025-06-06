@@ -8,7 +8,7 @@ import Header from "../../components/HomePage/Header";
 interface QuizProps {
     courseId?: string;
 }
-const Quiz: React.FC<QuizProps> = ({courseId}) => {
+const Quiz: React.FC<QuizProps> = () => {
     const [activityName, setActivityName] = useState("");
     const navigate = useNavigate();
     const [questions, setQuestions] = useState<Question[]>([
