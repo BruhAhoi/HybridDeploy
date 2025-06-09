@@ -6,7 +6,6 @@ import { useNavigate } from "react-router-dom";
 import { Course } from "../types/index";
 import { useSelector } from "react-redux";
 import { RootState } from "../store/store";
-import { baseImageUrl } from "../config/base";
 
 
 const CoursePage: React.FC = () => {
@@ -20,6 +19,7 @@ const CoursePage: React.FC = () => {
   const roleId = useSelector((state: RootState) => state.user.roleId);
 
   const pageSize = 3;
+  const baseImageUrl = "https://hybridelearn-acdwdxa8dmh2fdgm.southeastasia-01.azurewebsites.net/images/";
 
   const extractThumbnail = (dataText?: string): string => {
     if (!dataText) {
@@ -92,7 +92,7 @@ const CoursePage: React.FC = () => {
   }) => (
     <div 
     onClick={onClick}
-    className="bg-pink-50 p-4 rounded-xl shadow-md text-center w-[300px] h-[300px]">
+    className="bg-pink-50 p-4 rounded-xl shadow-md text-center w-[200px] h-[250px]">
       <img
         src={encodeURI(thumbnail ?? "/placeholder-image.jpg")}
         alt={`${courseName} thumbnail`}
@@ -123,7 +123,7 @@ const CoursePage: React.FC = () => {
       <div className="font-sans">
         {/* Search Bar */}
         <div
-          className="relative bg-cover bg-center h-[600px] flex items-center justify-center"
+          className="relative bg-cover bg-center h-[650px] flex items-center justify-center"
           style={{ backgroundImage: `url(${BG})` }}
         >
           {/* <div className="absolute top-1/4 text-white text-xl font-semibold">Choose a course</div>
@@ -158,8 +158,8 @@ const CoursePage: React.FC = () => {
           {loading ? (
             <div className="text-center text-gray-500">Loading courses...</div>
           ) : (
-            <div className="max-w-6xl mx-auto">
-              <div className="ml-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+            <div className="max-w-2xl mx-auto">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                 {courses.map((course, index) => (
                   <CourseCard
                     key={index}

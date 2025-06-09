@@ -13,18 +13,18 @@ const ItemTypes = {
   WORD: 'word',
 };
 
-const WordCard: React.FC<{ word: Word; index: number; moveWord?: (from: number, to: number) => void; isInDropArea: boolean }> = ({ word, index, isInDropArea }) => {
+const WordCard: React.FC<{ word: Word; index: number; isInDropArea: boolean }> = ({ word, index, isInDropArea }) => {
   const [, drag] = useDrag({
     type: ItemTypes.WORD,
     item: { id: word.id, index },
   });
 
-  const dragRef = React.useRef<HTMLDivElement>(null);
-  drag(dragRef);
+  const divRef = React.useRef<HTMLDivElement>(null);
+  drag(divRef);
 
   return (
     <div
-      ref={dragRef}
+      ref={divRef}
       className={`px-4 py-2 bg-yellow-200 text-black rounded-full cursor-move ${isInDropArea ? 'opacity-50' : ''} text-center`}
     >
       {word.text}
@@ -32,21 +32,22 @@ const WordCard: React.FC<{ word: Word; index: number; moveWord?: (from: number, 
   );
 };
 
-const DropArea: React.FC<{ words: Word[]; setDroppedWords: React.Dispatch<React.SetStateAction<Word[]>>; originalWords: Word[]; removeWord: (fromIndex: number) => void }> = ({ words, setDroppedWords, originalWords, removeWord }) => {
+const DropArea: React.FC<{ words: Word[]; moveWord: (fromIndex: number) => void; setDroppedWords: React.Dispatch<React.SetStateAction<Word[]>>; originalWords: Word[] }> = ({ words, moveWord, setDroppedWords, originalWords }) => {
+  const dropRef = React.useRef<HTMLDivElement>(null);
   const [, drop] = useDrop({
     accept: ItemTypes.WORD,
     drop: (item: { id: number; index: number }) => {
       const droppedWord = originalWords[item.index];
       if (droppedWord) {
         setDroppedWords((prev) => [...prev, droppedWord]);
-        removeWord(item.index);
+        moveWord(item.index);
       }
     },
   });
 
-  const dropRef = React.useCallback((node: HTMLDivElement | null) => {
-    if (node) {
-      drop(node);
+  React.useEffect(() => {
+    if (dropRef.current) {
+      drop(dropRef.current);
     }
   }, [drop]);
 
@@ -76,7 +77,7 @@ const RestorationReview: React.FC = () => {
   const [words, setWords] = useState<Word[]>(shuffledWords);
   const [droppedWords, setDroppedWords] = useState<Word[]>([]);
 
-  const removeWord = (fromIndex: number) => {
+  const moveWord = (fromIndex: number) => {
     const newWords = words.filter((_, index) => index !== fromIndex);
     setWords(newWords);
   };
@@ -111,28 +112,28 @@ const RestorationReview: React.FC = () => {
               />
             ))}
           </div>
-        </div>
 
-        {/* Drop Area */}
-        <div className='w-225 h-20'>
-          <DropArea words={droppedWords} removeWord={removeWord} setDroppedWords={setDroppedWords} originalWords={words} />
-        </div>
-        <DropArea words={droppedWords} setDroppedWords={setDroppedWords} originalWords={words} removeWord={removeWord} />
+          {/* Drop Area */}
+          <div className='w-225 h-20'>
+              <DropArea words={droppedWords} moveWord={moveWord} setDroppedWords={setDroppedWords} originalWords={words} />
+          </div>
+          
 
-        {/* Buttons */}
-        <div className="w-full max-w-[700px] flex justify-between items-center px-4 mt-4">
-          <button
-            onClick={handleTryAgain}
-            className="px-6 py-2 bg-blue-200 text-blue-800 font-semibold rounded-full hover:bg-blue-300 transition"
-          >
-            Try again
-          </button>
-          <button
-            onClick={handleSubmit}
-            className="px-6 py-2 bg-green-200 text-green-800 font-semibold rounded-full hover:bg-green-300 transition"
-          >
-            Submit
-          </button>
+          {/* Buttons */}
+          <div className="w-full max-w-[700px] flex justify-between items-center px-4 mt-4">
+            <button
+              onClick={handleTryAgain}
+              className="px-6 py-2 bg-blue-200 text-blue-800 font-semibold rounded-full hover:bg-blue-300 transition"
+            >
+              Try again
+            </button>
+            <button
+              onClick={handleSubmit}
+              className="px-6 py-2 bg-green-200 text-green-800 font-semibold rounded-full hover:bg-green-300 transition"
+            >
+              Submit
+            </button>
+          </div>
         </div>
       </div>
       <Footer />

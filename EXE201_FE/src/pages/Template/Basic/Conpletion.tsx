@@ -90,7 +90,7 @@ const CompletionTemplate: React.FC = () => {
       return modified;
     }).filter((s) => s !== null) as string[];
 
-    const validOptions = options.map((opts) => 
+    const validOptions = options.map((opts) =>
       opts.filter((opt) => opt.trim() !== "").length > 0 ? opts.filter((opt) => opt.trim() !== "") : ["Option 1", "Option 2"]
     );
 
