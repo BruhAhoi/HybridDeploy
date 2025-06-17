@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../../store/store";
 import { useParams } from "react-router-dom";
 import { editAnagram } from "../../../services/authService";
+import { toast } from "react-toastify";
 
 type AnagramEntry = {
   word: string;
@@ -13,6 +14,7 @@ type EditAnagramProps = {
   initialActivityName: string;
   initialDuration: number;
   initialWords: string[];
+  initialThumbnailUrl?: string | null;
   onSave: (data: {
     activityName: string;
     duration: number;
@@ -25,6 +27,7 @@ const EditAnagram: React.FC<EditAnagramProps> = ({
   initialActivityName,
   initialDuration,
   initialWords,
+  initialThumbnailUrl,
   onSave,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -37,6 +40,7 @@ const EditAnagram: React.FC<EditAnagramProps> = ({
 
   const teacherId = useSelector((state: RootState) => state.user.userId);
   const { minigameId } = useParams<{ minigameId: string }>();
+
 
 
   const openModal = () => {
@@ -69,22 +73,18 @@ const EditAnagram: React.FC<EditAnagramProps> = ({
       return;
     }
 
-    // Convert entries to Words[] type for GameData
-    const gameData = [
-      {
-        words: entries.filter((e) => e.word).map((entry) => entry.word.trim()),
-      },
-    ];
 
     const updateData = {
       MinigameId: minigameId,
       MinigameName: activityName,
       ImageFile: thumbnail ?? undefined,
-      GameData: gameData,
+      ImageUrl: initialThumbnailUrl,
       Duration: duration,
       TemplateId: "TP3", // ⚠️ Cập nhật đúng TemplateId của Anagram
       TeacherId: teacherId,
+      GameData: entries.map((entry) => ({ words: [entry.word.trim()] })),
     };
+    console.log("Anagram data to be sent:", updateData);
 
     const result = await editAnagram(updateData);
 
@@ -96,6 +96,7 @@ const EditAnagram: React.FC<EditAnagramProps> = ({
         thumbnail,
       });
       setIsOpen(false);
+      toast.success("Cập nhật thành công")
     } else {
       alert("Cập nhật thất bại. Vui lòng thử lại.");
     }

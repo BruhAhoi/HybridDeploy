@@ -13,18 +13,18 @@ const ItemTypes = {
   WORD: 'word',
 };
 
-const WordCard: React.FC<{ word: Word; index: number; isInDropArea: boolean }> = ({ word, index, isInDropArea }) => {
+const WordCard: React.FC<{ word: Word; index: number; moveWord: (word: Word, fromIndex: number) => void; isInDropArea: boolean }> = ({ word, index, isInDropArea }) => {
   const [, drag] = useDrag({
     type: ItemTypes.WORD,
     item: { id: word.id, index },
   });
 
-  const divRef = React.useRef<HTMLDivElement>(null);
-  drag(divRef);
+  const ref = React.useRef<HTMLDivElement>(null);
+  drag(ref);
 
   return (
     <div
-      ref={divRef}
+      ref={ref}
       className={`px-4 py-2 bg-yellow-200 text-black rounded-full cursor-move ${isInDropArea ? 'opacity-50' : ''} text-center`}
     >
       {word.text}
@@ -32,35 +32,30 @@ const WordCard: React.FC<{ word: Word; index: number; isInDropArea: boolean }> =
   );
 };
 
-const DropArea: React.FC<{ words: Word[]; moveWord: (fromIndex: number) => void; setDroppedWords: React.Dispatch<React.SetStateAction<Word[]>>; originalWords: Word[] }> = ({ words, moveWord, setDroppedWords, originalWords }) => {
-  const dropRef = React.useRef<HTMLDivElement>(null);
+const DropArea: React.FC<{ words: Word[]; moveWord: (word: Word, from: number) => void; setDroppedWords: React.Dispatch<React.SetStateAction<Word[]>>; originalWords: Word[] }> = ({ words, moveWord, setDroppedWords, originalWords }) => {
   const [, drop] = useDrop({
     accept: ItemTypes.WORD,
     drop: (item: { id: number; index: number }) => {
       const droppedWord = originalWords[item.index];
       if (droppedWord) {
         setDroppedWords((prev) => [...prev, droppedWord]);
-        moveWord(item.index);
+        moveWord(droppedWord, item.index);
       }
     },
   });
 
-  React.useEffect(() => {
-    if (dropRef.current) {
-      drop(dropRef.current);
-    }
-  }, [drop]);
-
   return (
     <div
-      ref={dropRef}
+      ref={(node) => {
+        if (node) drop(node);
+      }}
       className="w-full h-12 border border-gray-400 rounded flex items-center justify-center space-x-2 p-2"
     >
       {words.length === 0 ? (
         <span className="text-gray-500">Drop words here</span>
       ) : (
         words.map((word, index) => (
-          <WordCard key={word.id} word={word} index={index} isInDropArea={true} />
+          <WordCard key={word.id} word={word} index={index} moveWord={() => {}} isInDropArea={true} />
         ))
       )}
     </div>
@@ -77,8 +72,9 @@ const RestorationReview: React.FC = () => {
   const [words, setWords] = useState<Word[]>(shuffledWords);
   const [droppedWords, setDroppedWords] = useState<Word[]>([]);
 
-  const moveWord = (fromIndex: number) => {
+  const moveWord = (word: Word, fromIndex: number) => {
     const newWords = words.filter((_, index) => index !== fromIndex);
+    console.log(word)
     setWords(newWords);
   };
 
@@ -103,37 +99,38 @@ const RestorationReview: React.FC = () => {
         {/* Word Grid */}
         <div className="w-[900px] h-[400px] bg-pink-100 border rounded-lg p-6 mb-12 flex justify-center items-center">
           <div className="grid grid-cols-3 gap-12 mt-5 mb-5">
-            {words.map((word: Word, index: number) => (
+            {words.map((word, index) => (
               <WordCard
                 key={word.id}
                 word={word}
                 index={index}
+                moveWord={moveWord}
                 isInDropArea={false}
               />
             ))}
           </div>
+        </div>
 
-          {/* Drop Area */}
-          <div className='w-225 h-20'>
-              <DropArea words={droppedWords} moveWord={moveWord} setDroppedWords={setDroppedWords} originalWords={words} />
-          </div>
-          
+        {/* Drop Area */}
+        <div className='w-225 h-20'>
+            <DropArea words={droppedWords} moveWord={moveWord} setDroppedWords={setDroppedWords} originalWords={words} />
+        </div>
+        
 
-          {/* Buttons */}
-          <div className="w-full max-w-[700px] flex justify-between items-center px-4 mt-4">
-            <button
-              onClick={handleTryAgain}
-              className="px-6 py-2 bg-blue-200 text-blue-800 font-semibold rounded-full hover:bg-blue-300 transition"
-            >
-              Try again
-            </button>
-            <button
-              onClick={handleSubmit}
-              className="px-6 py-2 bg-green-200 text-green-800 font-semibold rounded-full hover:bg-green-300 transition"
-            >
-              Submit
-            </button>
-          </div>
+        {/* Buttons */}
+        <div className="w-full max-w-[700px] flex justify-between items-center px-4 mt-4">
+          <button
+            onClick={handleTryAgain}
+            className="px-6 py-2 bg-blue-200 text-blue-800 font-semibold rounded-full hover:bg-blue-300 transition"
+          >
+            Try again
+          </button>
+          <button
+            onClick={handleSubmit}
+            className="px-6 py-2 bg-green-200 text-green-800 font-semibold rounded-full hover:bg-green-300 transition"
+          >
+            Submit
+          </button>
         </div>
       </div>
       <Footer />
