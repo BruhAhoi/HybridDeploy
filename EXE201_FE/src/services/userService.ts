@@ -10,7 +10,6 @@ export const getLocalISOTime = () => {
 };
 //payment
 export const checkSupscription = async (body: {userId: string, isTeacher: boolean}) =>{
-    console.log(body);
     try{
         const response = await axiosInstance.post(`/api/Auth/check-supscription`, body);
         return response.data;
