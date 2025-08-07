@@ -62,18 +62,6 @@ const Footer: React.FC = () => {
                 </p>
               </div>
 
-              {/* Social Media Icons */}
-              <div className="flex gap-4 mt-6">
-                <a href="#" className="w-10 h-10 bg-white/10 hover:bg-white/20 rounded-full flex items-center justify-center transition-all duration-300 hover:scale-110">
-                  <span className="text-xl">📘</span>
-                </a>
-                <a href="#" className="w-10 h-10 bg-white/10 hover:bg-white/20 rounded-full flex items-center justify-center transition-all duration-300 hover:scale-110">
-                  <span className="text-xl">📧</span>
-                </a>
-                <a href="#" className="w-10 h-10 bg-white/10 hover:bg-white/20 rounded-full flex items-center justify-center transition-all duration-300 hover:scale-110">
-                  <span className="text-xl">💬</span>
-                </a>
-              </div>
             </motion.div>
 
             {/* Our Company */}
@@ -86,8 +74,7 @@ const Footer: React.FC = () => {
                 {[
                   { name: "Trang chủ", path: "/" },
                   { name: "Về chúng tôi", path: "/about-us" },
-                  { name: "Liên hệ", path: "https://www.facebook.com/profile.php?id=61577080800928", external: true},
-                  { name: "Mẫu bài học", path: "/templates" },
+                  { name: "Liên hệ", path: "https://www.facebook.com/profile.php?id=61577080800928", external: true },
                   { name: "Khóa học", path: "/course" }
                 ].map((item, index) => (
                   <li key={index}>
@@ -118,18 +105,18 @@ const Footer: React.FC = () => {
             <motion.div variants={itemVariants}>
               <h3 className="font-bold text-xl mb-6 text-white flex items-center gap-2">
                 <span className="text-2xl">📋</span>
-                ĐIỀU KHOẢN
+                TRANG THÔNG TIN
               </h3>
               <ul className="space-y-3">
                 {[
-                  { name: "Chính sách bảo mật", path: "/privacy-policy" },
-                  { name: "Chính sách hợp đồng", path: "/contract-policy" },
-                  { name: "Chính sách giá cả", path: "/pricing-policy" }
+                  { name: "FACEBOOK", path: "https://www.facebook.com/profile.php?id=61577080800928", external: true },
+                  { name: "INSTAGRAM", path: "https://www.instagram.com/hybrid.vn", external: true },
                 ].map((item, index) => (
                   <li key={index}>
                     <a
-                      href="#"
-                      onClick={() => navigate(item.path)}
+                      href={item.path}
+                      target={item.external ? "_blank" : "_self"}
+                      rel={item.external ? "noopener noreferrer" : undefined}
                       className="text-blue-100 hover:text-white transition-all duration-300 hover:translate-x-2 inline-block font-medium"
                     >
                       {item.name}
